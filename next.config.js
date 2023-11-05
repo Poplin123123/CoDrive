@@ -6,6 +6,7 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ["imgd-ct.aeplcdn.com"],
+    unoptimized: true,
   },
 };
 
