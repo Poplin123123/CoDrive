@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { useRef, useState } from "react";
 import { NotificationsActiveTwoTone } from "@mui/icons-material";
-// import { OmediaTheme } from "@/theme/base";
 
 function HeaderNotifications() {
   const [isOpen, setOpen] = useState(false);

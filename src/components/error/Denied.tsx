@@ -1,7 +1,7 @@
 import { styled, Box, Button } from "@mui/material";
-import type { OmediaTheme } from "@/theme/base";
 import Title from "@/components/Title";
 import Link from "next/link";
+import { CoDriverTheme } from "@/theme/light";
 
 function Denied() {
   return (
@@ -25,7 +25,7 @@ function Denied() {
 
 export { Denied };
 
-const Content = styled(Box)(({ theme }: OmediaTheme) => ({
+const Content = styled(Box)(({ theme }: CoDriverTheme) => ({
   display: "flex",
   height: "100vh",
   backgroundColor: theme?.palette.background.paper,

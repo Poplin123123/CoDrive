@@ -1,5 +1,5 @@
+import { CoDriverTheme } from "@/theme/light";
 import { Box, Drawer, Breakpoint, styled } from "@mui/material";
-import { OmediaTheme } from "@/theme/base";
 import { ReactNode } from "react";
 
 interface IProps {
@@ -31,7 +31,7 @@ function BaseDrawer({ onClose, children, open }: IProps) {
   );
 }
 
-const DrawerWrapper = styled(Drawer)(({ theme }: OmediaTheme) => ({
+const DrawerWrapper = styled(Drawer)(({ theme }: CoDriverTheme) => ({
   "& .MuiPaper-root": {
     flexDirection: "column",
     alignItems: "center",
@@ -48,7 +48,7 @@ const DrawerWrapper = styled(Drawer)(({ theme }: OmediaTheme) => ({
   },
 }));
 
-const Sidebar = styled(Box)(({ theme }: OmediaTheme) => ({
+const Sidebar = styled(Box)(({ theme }: CoDriverTheme) => ({
   position: "relative",
   height: "100%",
   overflowX: "hidden",

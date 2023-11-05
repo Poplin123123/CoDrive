@@ -1,3 +1,4 @@
+import { useState, useRef, ComponentType, LegacyRef } from "react";
 import {
   Box,
   Card,
@@ -10,6 +11,7 @@ import {
   Stack,
   InputAdornment,
   Grid,
+  styled,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -18,15 +20,19 @@ import {
   RuleTwoTone,
 } from "@mui/icons-material";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import Page from "@/components/Page";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePickerInput from "@/components/Search/DatePickerInput";
 import clsx from "clsx";
+import { Value, ReactQuillProps } from "react-quill";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { CoDriverTheme } from "@/theme/light";
+import { useImmer } from "use-immer";
+import { format } from "date-fns";
 
 const CITIES_TEMP = [
   "Batumi",
@@ -40,6 +46,24 @@ const CITIES_TEMP = [
   "Kareli",
   "Terjola",
 ];
+
+interface QuillProps extends ReactQuillProps {
+  forwardedRef: LegacyRef<ReactQuill> | undefined;
+}
+
+const QuillNoSSRWrapper: ComponentType<QuillProps> = dynamic(
+  async () => {
+    const { default: RQ } = await import("react-quill");
+
+    // eslint-disable-next-line react/display-name
+    return function ({ forwardedRef, ...props }) {
+      return <RQ ref={forwardedRef} {...props} />;
+    };
+  },
+  {
+    ssr: false,
+  }
+);
 
 const useStyles = makeStyles((theme: CoDriverTheme) => ({
   quillBackground: {
@@ -67,6 +91,14 @@ const NewRide = () => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
+  const ref = useRef<ReactQuill>(null);
+
+  const [filters, setFilters] = useImmer({
+    leavingFrom: (router.query.leaving as string) || "",
+    goingTo: (router.query.going as string) || "",
+    guestsQuantity: (router.query.quantity as string) || "",
+    date: (router.query.date as string) || format(new Date(), "MM/dd/yyyy"),
+  });
 
   return (
     <Page title="Add new ride">
@@ -151,13 +183,13 @@ const NewRide = () => {
                 showIcon
                 id="datepicker-id"
                 name="date-demo"
-                // onChange={(e) => {
-                //   changeFilters((draft) => {
-                //     draft.date = format(e || new Date(), "MM/dd/yyyy");
-                //   });
-                // }}
-                // selected={new Date(filters.date)}
-                // value={filters.date}
+                onChange={(e) => {
+                  setFilters((draft) => {
+                    draft.date = format(e || new Date(), "MM/dd/yyyy");
+                  });
+                }}
+                selected={new Date(filters.date)}
+                value={filters.date}
                 placeholderText="Date"
                 customInput={<DatePickerInput />}
               />
@@ -231,10 +263,10 @@ const NewRide = () => {
           <Grid item xs={12}>
             <div className="flex md:flex-row flex-col w-full">
               <div className="relative w-full">
-                <ReactQuill
+                <ReactQuillWrapper
                   preserveWhitespace
-                  className={clsx(classes.editor)}
-                  placeholder="Customize your Welcome Message & provide instructions to your guests"
+                  forwardedRef={ref}
+                  // className={clsx(classes.editor)}
                   modules={{
                     toolbar: [
                       ["bold", "italic", "underline"],
@@ -276,5 +308,27 @@ const NewRide = () => {
     </Page>
   );
 };
+
+const ReactQuillWrapper = styled(QuillNoSSRWrapper)(() => ({
+  "& > .quill": {
+    height: "100%",
+    width: "100%",
+  },
+  "& > .ql-container": {
+    borderRadius: "0 0 4px 4px",
+    minHeight: "8rem",
+    width: "100%",
+    paddingLeft: "0px",
+    fontSize: "1em",
+    border: "none !important",
+  },
+  "& > .ql-container .ql-editor": {
+    paddingLeft: "0px",
+  },
+  "& > .ql-container .ql-editor::before": {
+    left: "0",
+    fontSize: "1rem",
+  },
+}));
 
 export default NewRide;

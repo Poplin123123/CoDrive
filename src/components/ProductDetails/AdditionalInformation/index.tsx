@@ -11,12 +11,11 @@ import {
   darken,
 } from "@mui/material";
 import { CoDriverTheme } from "@/theme/light";
-import StarRatings from "react-star-ratings";
-import { Map, Marker } from "pigeon-maps";
-import { osm } from "pigeon-maps/providers";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Lines from "./MapLines";
-import axios from "axios";
+// import { Map, Marker } from "pigeon-maps";
+// import { osm } from "pigeon-maps/providers";
+// import LocationOnIcon from "@mui/icons-material/LocationOn";
+// import Lines from "./MapLines";
+// import axios from "axios";
 
 function AdditionalInformation() {
   const [hue, setHue] = useState(0);
@@ -80,7 +79,7 @@ function AdditionalInformation() {
       <SectionWrapper>
         <SectionHeader>Map:</SectionHeader>
         <Box sx={{ mx: 1, mt: 1 }}>
-          <Map
+          {/* <Map
             provider={osm}
             height={600}
             defaultCenter={[42.3154, 43.3569]}
@@ -98,8 +97,8 @@ function AdditionalInformation() {
               anchor={[41.6461, 41.6405]}
               color={"green"}
               onClick={() => setHue(hue + 20)}
-            />
-            {/* {mapsRef.current && path && (
+            /> */}
+          {/* {mapsRef.current && path && (
             <Lines
               coordsArray={
                 path.length > 0
@@ -115,7 +114,7 @@ function AdditionalInformation() {
               latLngToPixel={mapsRef.current.latLngToPixel}
             />
           )} */}
-          </Map>
+          {/* </Map> */}
         </Box>
       </SectionWrapper>
     </Box>

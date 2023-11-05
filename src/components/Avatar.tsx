@@ -1,4 +1,3 @@
-// import { OmediaTheme } from "@/theme/base";
 import { Avatar as MuiAvatar, AvatarProps, styled } from "@mui/material";
 
 interface IProps {
