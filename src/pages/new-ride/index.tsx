@@ -101,7 +101,7 @@ const NewRide = () => {
   });
 
   return (
-    <Page title="Add new ride">
+    <Page title="Add New Ride">
       <Card sx={{ p: 3, background: lighten(theme.palette.primary.main, 0.1) }}>
         <Stack
           flexDirection={"row"}
@@ -116,7 +116,7 @@ const NewRide = () => {
           </Typography>
         </Stack>
         <Typography variant="h2" fontSize={25} mt={1} sx={{ color: "white" }}>
-          Add new ride
+          Add New Ride
         </Typography>
       </Card>
       <Card sx={{ p: 3, mt: 5 }}>
@@ -180,9 +180,8 @@ const NewRide = () => {
           <Grid container item xs={12} gap={2}>
             <Grid item md={5.8} xs={12}>
               <DatePicker
-                showIcon
+                showIcon={false}
                 id="datepicker-id"
-                name="date-demo"
                 onChange={(e) => {
                   setFilters((draft) => {
                     draft.date = format(e || new Date(), "MM/dd/yyyy");

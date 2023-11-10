@@ -86,7 +86,7 @@ export default function Home() {
                 alignItems="center"
               >
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   // sx={{ color: "#73d700", borderColor: "#73d700" }}
                   onClick={() =>
                     handleSubmit(
@@ -101,6 +101,7 @@ export default function Home() {
                     !filters.goingTo ||
                     !filters.guestsQuantity
                   }
+                  sx={{ height: "53px", px: 7 }}
                 >
                   {/* {isValidating && (
                 <CircularProgress

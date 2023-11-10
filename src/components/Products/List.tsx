@@ -5,6 +5,7 @@ import {
   lighten,
   darken,
   Tooltip,
+  useTheme,
 } from "@mui/material";
 import Image from "next/image";
 import PersonIcon from "@mui/icons-material/Person";
@@ -16,6 +17,8 @@ import Link from "next/link";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { UserQuickView } from "../UserQuickView";
 import { useState } from "react";
+import RoadMap from "../Animations/RoadMap";
+import { format } from "date-fns";
 
 interface IProps {
   data: {
@@ -38,131 +41,85 @@ interface IProps {
 
 export default function ProductList({ data }: IProps) {
   const user = users.find((user) => user.id === data.userId);
-  const [showUserQuickView, setShowUserQuickView] = useState(false);
+  const theme = useTheme();
 
   return (
     <Box sx={{ display: "flex" }}>
       <Link href={`/product/${data.id}`} passHref legacyBehavior>
-        <Box sx={{ cursor: "pointer" }}>
-          <Image
-            src="https://imgd-ct.aeplcdn.com/664x415/n/9herrua_1559465.jpg?q=75"
-            alt="photo"
-            width={250}
-            height={150}
-          />
-        </Box>
-      </Link>
-      <Box
-        sx={{
-          ml: 2,
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
         <Box
           sx={{
+            ml: 2,
+            width: "100%",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "20%",
+            justifyContent: "space-between",
+            cursor: "pointer",
           }}
         >
-          <Typography variant="h1" sx={{ ml: 1, fontSize: "24px" }}>
-            {data.Destination}
-          </Typography>
+          <RoadMap from={data.goingFrom} to={data.Destination} />
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
+              alignItems: "flex-start",
               justifyContent: "center",
-              alignItems: "center",
+              ml: 2,
+              gap: 4,
             }}
           >
-            <FiberManualRecordIcon sx={{ color: "rgba(52, 58, 64, 0.7)" }} />
-            <Divider
+            <Box
               sx={{
-                width: "5px",
-                height: "50px",
-                my: "-5px",
-                background: "rgba(82, 85, 91, 0.1)",
-                // background:
-                //   "linear-gradient(to right, #9eff73, #55ff0b, #31a100)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
-            <FiberManualRecordIcon sx={{ color: "rgba(52, 58, 64, 0.7)" }} />
-          </Box>
-          <Typography variant="h1" sx={{ fontSize: "24px" }}>
-            {data.goingFrom}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            ml: 2,
-            gap: 4,
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onClick={() => setShowUserQuickView(true)}
-          >
-            <PersonIcon color="secondary" sx={{ fontSize: "2rem" }} />
-            <Typography sx={{ ml: 1 }} fontWeight={700}>
-              {user?.firstName} {user?.lastName}
-            </Typography>
-          </Box>
-          <Tooltip title="9 September">
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <CalendarTodayIcon color="secondary" sx={{ fontSize: "2rem" }} />
-              <Typography variant="h3" sx={{ ml: 1, fontSize: "14px" }}>
-                {data.date}, {data.startTime} - {data.endTime}
+            >
+              <PersonIcon color="secondary" sx={{ fontSize: "2rem" }} />
+              <Typography sx={{ ml: 1 }} fontWeight={700}>
+                {user?.firstName} {user?.lastName}
               </Typography>
             </Box>
-          </Tooltip>
-        </Box>
-        <Box
-          sx={{
-            width: "25%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            ml: 2,
-            gap: 4,
-          }}
-        >
+            <Tooltip title={format(new Date(data.date), "dd MMMM")}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <CalendarTodayIcon
+                  color="secondary"
+                  sx={{ fontSize: "2rem" }}
+                />
+                <Typography variant="h3" sx={{ ml: 1, fontSize: "14px" }}>
+                  {data.date}, {data.startTime} - {data.endTime}
+                </Typography>
+              </Box>
+            </Tooltip>
+          </Box>
           <Box
             sx={{
+              width: "25%",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
+              justifyContent: "center",
+              ml: 2,
+              gap: 4,
             }}
           >
-            {/* <AttachMoneyIcon sx={{ color: "#31a100" }} /> */}
-            <Image
-              height={20}
-              width={40}
-              alt="CoDrive"
-              src="/assets/lari.svg"
-            />
-            <Typography fontSize={"14px"}>{data.price}</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {/* <AttachMoneyIcon sx={{ color: "#31a100" }} /> */}
+              <Image
+                height={20}
+                width={40}
+                alt="CoDrive"
+                src="/assets/lari.svg"
+              />
+              <Typography fontSize={"14px"}>{data.price}</Typography>
+            </Box>
+            <PriceBag price={data.price} />
           </Box>
-          <PriceBag price={data.price} />
         </Box>
-      </Box>
-      <UserQuickView
-        open={showUserQuickView}
-        onClose={() => setShowUserQuickView(false)}
-        user={user}
-      />
+      </Link>
     </Box>
   );
 }

@@ -14,7 +14,7 @@ const DatePickerInput = (props: any) => {
       size="large"
       ref={props.ref}
       startIcon={<CalendarTodayIcon />}
-      sx={{ height: "100%" }}
+      sx={{ height: "53px" }}
     >
       {props.value}
     </Button>

@@ -13,6 +13,7 @@ import Search from "@/components/Search";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import ConfirmationModal from "@/components/Modal/ConfirmationModal";
+import { compareProducts } from "@/utils/date";
 
 const tags = [
   "Pets",
@@ -70,7 +71,11 @@ export default function ProductDetails() {
     }
 
     if (sort.id === 3) {
-      return tempProducts.sort((a, b) => a.price - b.price);
+      console.log(
+        tempProducts.sort(compareProducts),
+        "tempProducts.sort(compareProducts)"
+      );
+      return tempProducts.sort(compareProducts);
     }
 
     return tempProducts;
@@ -136,7 +141,7 @@ export default function ProductDetails() {
               alignItems: "center",
             }}
           >
-            <Search filters={filters} changeFilters={setFilters} />
+            {/* <Search filters={filters} changeFilters={setFilters} /> */}
           </Box>
           <Box sx={{ width: "12%" }}>
             <Button

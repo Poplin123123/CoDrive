@@ -1,4 +1,4 @@
-import { Box, Typography, Card, Chip } from "@mui/material";
+import { Box, lighten, Card, Chip, useTheme } from "@mui/material";
 import { users } from "@/mock/products";
 
 interface IProps {
@@ -12,27 +12,41 @@ const priceTags = {
 };
 
 export default function PriceBag({ price }: IProps) {
+  const theme = useTheme();
+
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       {price > 10 && (
         <Chip
           label={priceTags.expansive}
           variant="outlined"
-          sx={{ background: "#ff3838", color: "white", border: "none" }}
+          sx={{
+            background: theme.palette.error.main,
+            color: "white",
+            border: "none",
+          }}
         />
       )}
       {price === 10 && (
         <Chip
           label={priceTags.normal}
           variant="outlined"
-          sx={{ background: "#17c0eb", color: "white", border: "none" }}
+          sx={{
+            background: lighten(theme.palette.primary.main, 0.2),
+            color: "white",
+            border: "none",
+          }}
         />
       )}
       {price < 10 && (
         <Chip
           label={priceTags.cheap}
           variant="outlined"
-          sx={{ background: "#3ae374", color: "white", border: "none" }}
+          sx={{
+            background: theme.palette.success.dark,
+            color: "white",
+            border: "none",
+          }}
         />
       )}
     </Box>
