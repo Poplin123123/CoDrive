@@ -35,7 +35,7 @@ export default function Home() {
     leavingFrom: "",
     goingTo: "",
     guestsQuantity: "",
-    date: format(new Date(), "MM/dd/yyyy"),
+    date: format(new Date(), "dd/MM/yyyy"),
   });
 
   const handleSubmit = (
@@ -50,10 +50,6 @@ export default function Home() {
       query: query, // Specify query parameters here
     });
   };
-
-  console.log(session, "session 11111");
-  console.log(status, "status 11111");
-  // "authenticated"; "loading";
 
   return (
     <Page title="CoDrive">

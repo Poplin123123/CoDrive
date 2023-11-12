@@ -15,9 +15,11 @@ import AirportShuttleTwoToneIcon from "@mui/icons-material/AirportShuttleTwoTone
 interface IProps {
   from: string;
   to: string;
+  startTime: string;
+  endTime: string;
 }
 
-const RoadMap = ({ from, to }: IProps) => {
+const RoadMap = ({ from, to, startTime, endTime }: IProps) => {
   const theme = useTheme();
 
   return (
@@ -35,6 +37,11 @@ const RoadMap = ({ from, to }: IProps) => {
           }}
         >
           {from}
+        </Typography>
+        <Typography
+          sx={{ fontWeight: 600, color: theme.palette.primary.dark, ml: 0.5 }}
+        >
+          {startTime}
         </Typography>
       </Stack>
       <Stack direction="column" sx={{ width: "8em" }}>
@@ -57,6 +64,11 @@ const RoadMap = ({ from, to }: IProps) => {
           sx={{ fontSize: "24px", color: theme.palette.primary.dark }}
         >
           {to}
+        </Typography>
+        <Typography
+          sx={{ fontWeight: 600, color: theme.palette.primary.dark, ml: 0.5 }}
+        >
+          {endTime}
         </Typography>
       </Stack>
     </Stack>

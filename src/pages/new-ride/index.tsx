@@ -2,23 +2,17 @@ import { useState, useRef, ComponentType, LegacyRef } from "react";
 import {
   Box,
   Card,
-  Autocomplete,
-  TextField,
   Button,
   Typography,
   lighten,
   useTheme,
   Stack,
-  InputAdornment,
-  Grid,
   styled,
+  Stepper,
+  Step,
+  StepLabel,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  SearchTwoTone,
-  PersonOutlineTwoTone,
-  RuleTwoTone,
-} from "@mui/icons-material";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Page from "@/components/Page";
@@ -33,6 +27,9 @@ import "react-quill/dist/quill.snow.css";
 import { CoDriverTheme } from "@/theme/light";
 import { useImmer } from "use-immer";
 import { format } from "date-fns";
+import PinDropTwoToneIcon from "@mui/icons-material/PinDropTwoTone";
+import MapTwoToneIcon from "@mui/icons-material/MapTwoTone";
+import { RideDetails, AdditionalInformation } from "@/components/AddRide";
 
 const CITIES_TEMP = [
   "Batumi",
@@ -87,17 +84,25 @@ const useStyles = makeStyles((theme: CoDriverTheme) => ({
   }),
 }));
 
+const steps = ["Ride Details", "Additional Information", "Preview"];
+
 const NewRide = () => {
   const theme = useTheme();
   const router = useRouter();
   const classes = useStyles();
   const ref = useRef<ReactQuill>(null);
 
+  const [showMap, setShowMap] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+
   const [filters, setFilters] = useImmer({
-    leavingFrom: (router.query.leaving as string) || "",
-    goingTo: (router.query.going as string) || "",
-    guestsQuantity: (router.query.quantity as string) || "",
-    date: (router.query.date as string) || format(new Date(), "MM/dd/yyyy"),
+    leavingFrom: "",
+    goingTo: "",
+    guestsQuantity: "",
+    date: format(new Date(), "dd/MM/yyyy"),
+    pricePerPerson: 0,
+    demands: [],
+    aboutTheRide: "",
   });
 
   return (
@@ -119,10 +124,49 @@ const NewRide = () => {
           Add New Ride
         </Typography>
       </Card>
+
       <Card sx={{ p: 3, mt: 5 }}>
-        <Grid container xs={12} gap={2}>
-          <Grid container item xs={12} gap={2}>
+        <Stepper
+          activeStep={activeStep}
+          alternativeLabel
+          sx={{ background: "transparent" }}
+        >
+          {steps.map((label, index) => {
+            const stepProps: { completed?: boolean } = {};
+            const labelProps: {
+              optional?: React.ReactNode;
+            } = {};
+            // if (isStepOptional(index)) {
+            //   labelProps.optional = (
+            //     <Typography variant="caption">Optional</Typography>
+            //   );
+            // }
+            // if (isStepSkipped(index)) {
+            //   stepProps.completed = false;
+            // }
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+        <>
+          {activeStep === 0 && (
+            <Box sx={{ ml: 5 }}>
+              <RideDetails />
+            </Box>
+          )}
+          {activeStep === 1 && (
+            <Box sx={{ ml: 5 }}>
+              <AdditionalInformation />
+            </Box>
+          )}
+          {/* <Grid container item xs={12} gap={2}>
             <Grid item md={5.85} xs={12}>
+              <Typography variant="h2" color="primary.main" fontWeight={600}>
+                Going From
+              </Typography>
               <Autocomplete
                 size="medium"
                 options={CITIES_TEMP || []}
@@ -140,7 +184,13 @@ const NewRide = () => {
                     {...params}
                     InputProps={{
                       ...params.InputProps,
-                      startAdornment: <SearchTwoTone />,
+                      endAdornment: (
+                        <PinDropTwoToneIcon
+                          sx={{ cursor: "pointer" }}
+                          color="primary"
+                          onClick={() => setShowMap(true)}
+                        />
+                      ),
                     }}
                     placeholder="Leaving From..."
                     fullWidth
@@ -150,6 +200,9 @@ const NewRide = () => {
               />
             </Grid>
             <Grid item md={5.85} xs={12}>
+              <Typography variant="h2" color="primary.main" fontWeight={600}>
+                Going To
+              </Typography>
               <Autocomplete
                 size="medium"
                 options={CITIES_TEMP || []}
@@ -167,7 +220,13 @@ const NewRide = () => {
                     {...params}
                     InputProps={{
                       ...params.InputProps,
-                      startAdornment: <SearchTwoTone />,
+                      endAdornment: (
+                        <PinDropTwoToneIcon
+                          sx={{ cursor: "pointer" }}
+                          color="primary"
+                          onClick={() => setShowMap(true)}
+                        />
+                      ),
                     }}
                     placeholder="Going To..."
                     fullWidth
@@ -179,12 +238,13 @@ const NewRide = () => {
           </Grid>
           <Grid container item xs={12} gap={2}>
             <Grid item md={5.8} xs={12}>
+              <Typography>Date</Typography>
               <DatePicker
                 showIcon={false}
                 id="datepicker-id"
                 onChange={(e) => {
                   setFilters((draft) => {
-                    draft.date = format(e || new Date(), "MM/dd/yyyy");
+                    draft.date = format(e || new Date(), "dd/MM/yyyy");
                   });
                 }}
                 selected={new Date(filters.date)}
@@ -292,16 +352,40 @@ const NewRide = () => {
                 </h6>
               </div>
             </div>
-          </Grid>
-        </Grid>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            variant="contained"
-            onClick={() => {}}
-            sx={{ width: "10rem", height: "2.5rem", mt: 25 }}
-          >
-            Create Ride
-          </Button>
+          </Grid> */}
+        </>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: !!activeStep ? "space-between" : "flex-end",
+          }}
+        >
+          {!!activeStep && (
+            <Button
+              variant="contained"
+              onClick={() => setActiveStep((prev) => prev - 1)}
+              sx={{ height: "2.5rem", mt: 25 }}
+            >
+              Back
+            </Button>
+          )}
+          {!!steps?.[activeStep + 1] ? (
+            <Button
+              variant="contained"
+              onClick={() => setActiveStep((prev) => prev + 1)}
+              sx={{ width: "10rem", height: "2.5rem", mt: 25 }}
+            >
+              Next
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              onClick={() => setActiveStep((prev) => prev + 1)}
+              sx={{ width: "10rem", height: "2.5rem", mt: 25 }}
+            >
+              Create
+            </Button>
+          )}
         </Box>
       </Card>
     </Page>

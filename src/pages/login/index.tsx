@@ -12,6 +12,7 @@ import {
   Stack,
   styled,
   darken,
+  useTheme,
 } from "@mui/material";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -22,6 +23,7 @@ import Image from "next/image";
 
 export default function Product() {
   const router = useRouter();
+  const theme = useTheme();
 
   const [showTermsAndConditions, setShowTermsAndConditions] = useState(false);
 
@@ -32,7 +34,6 @@ export default function Product() {
           background: "white",
           p: 4,
           width: "35%",
-          margin: "auto",
           borderRadius: "5px",
         }}
       >
@@ -57,7 +58,7 @@ export default function Product() {
           <Typography
             fontWeight={700}
             onClick={() => router.push("forgot-password")}
-            sx={{ cursor: "pointer", color: "#3f9d00" }}
+            sx={{ cursor: "pointer", color: theme.palette.primary.main }}
           >
             Forgot password?
           </Typography>
@@ -76,9 +77,9 @@ export default function Product() {
           </Typography>
           <Typography
             sx={{
-              color: "#3f9d00",
+              color: theme.palette.primary.main,
               textDecoration: "underline",
-              textDecorationColor: "#3f9d00",
+              textDecorationColor: theme.palette.primary.main,
               cursor: "pointer",
             }}
             fontWeight={700}
@@ -87,24 +88,6 @@ export default function Product() {
             Sign up here
           </Typography>
         </Stack>
-        <GGButton
-          onClick={() =>
-            signIn("facebook", {
-              callbackUrl: "/",
-            })
-          }
-          size="large"
-          startIcon={
-            <Image
-              src="/assets/facebook_icon.svg.png"
-              height={22}
-              width={22}
-              alt="Facebook Logo"
-            />
-          }
-        >
-          Sign in with Facebook
-        </GGButton>
       </Container>
       <WarningModal
         open={showTermsAndConditions}

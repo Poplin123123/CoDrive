@@ -55,7 +55,6 @@ function UserQuickView({ open, onClose, user }: Props) {
                 </Typography>
               }
               variant="outlined"
-              icon={<PreviewIcon />}
             />
           </Box>
         }

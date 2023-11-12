@@ -47,7 +47,7 @@ export default function ProductDetails() {
     leavingFrom: (router.query.leaving as string) || "",
     goingTo: (router.query.going as string) || "",
     guestsQuantity: (router.query.quantity as string) || "",
-    date: (router.query.date as string) || format(new Date(), "MM/dd/yyyy"),
+    date: (router.query.date as string) || format(new Date(), "dd/MM/yyyy"),
   });
 
   console.log(filters, "filters 11");

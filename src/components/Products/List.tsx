@@ -18,7 +18,7 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { UserQuickView } from "../UserQuickView";
 import { useState } from "react";
 import RoadMap from "../Animations/RoadMap";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 
 interface IProps {
   data: {
@@ -55,7 +55,12 @@ export default function ProductList({ data }: IProps) {
             cursor: "pointer",
           }}
         >
-          <RoadMap from={data.goingFrom} to={data.Destination} />
+          <RoadMap
+            from={data.goingFrom}
+            to={data.Destination}
+            startTime={data.startTime}
+            endTime={data.endTime}
+          />
           <Box
             sx={{
               display: "flex",
@@ -78,7 +83,12 @@ export default function ProductList({ data }: IProps) {
                 {user?.firstName} {user?.lastName}
               </Typography>
             </Box>
-            <Tooltip title={format(new Date(data.date), "dd MMMM")}>
+            <Tooltip
+              title={format(
+                parse(data.date, "dd/MM/yyyy", new Date()),
+                "dd MMMM"
+              )}
+            >
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <CalendarTodayIcon
                   color="secondary"

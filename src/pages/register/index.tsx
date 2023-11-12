@@ -13,10 +13,12 @@ import {
   FormControlLabel,
   Button,
   Stack,
+  useTheme,
 } from "@mui/material";
 
 export default function Product() {
   const router = useRouter();
+  const theme = useTheme();
 
   const [showTermsAndConditions, setShowTermsAndConditions] = useState(false);
 
@@ -55,7 +57,7 @@ export default function Product() {
           <Typography
             mt={1}
             onClick={() => setShowTermsAndConditions(true)}
-            sx={{ cursor: "pointer", color: "#3f9d00" }}
+            sx={{ cursor: "pointer", color: theme.palette.primary.main }}
             fontWeight={600}
           >
             terms and conditions.
@@ -75,9 +77,9 @@ export default function Product() {
           </Typography>
           <Typography
             sx={{
-              color: "#3f9d00",
+              color: theme.palette.primary.main,
               textDecoration: "underline",
-              textDecorationColor: "#3f9d00",
+              textDecorationColor: theme.palette.primary.main,
               cursor: "pointer",
             }}
             fontWeight={700}
